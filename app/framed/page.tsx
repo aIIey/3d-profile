@@ -1,65 +1,76 @@
-"use client"
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import Link from "next/link";
+import React, { useState, useEffect } from "react";
 import ThreeDCardDemo from "../card2/page";
 
 const Framed = () => {
   const [showOverlay, setShowOverlay] = useState(true);
   const [ipAddress, setIpAddress] = useState(null);
+  const [hydrated, setHydrated] = useState(false); // Prevent rendering until hydration
 
   useEffect(() => {
-    // Fetch IP address
-    const fetchIpAddress = async () => {
-      try {
-        const response = await fetch('https://ipv4.wtfismyip.com/json');
-        const data = await response.json();
-        setIpAddress(data['YourFuckingIPAddress']);
-      } catch (error) {
-        console.error('Error fetching IP address:', error);
-      }
-    };
+    setHydrated(true); // Indicate hydration is complete
+  }, []);
 
-    // Hide overlay once IP address is fetched
+  useEffect(() => {
     if (showOverlay) {
+      const fetchIpAddress = async () => {
+        try {
+          const response = await fetch("https://ipv4.wtfismyip.com/json");
+          const data = await response.json();
+          setIpAddress(data["YourFuckingIPAddress"]);
+        } catch (error) {
+          console.error("Error fetching IP address:", error);
+        }
+      };
       fetchIpAddress();
     }
   }, [showOverlay]);
 
   useEffect(() => {
-    // Play audio when the overlay is hidden
     if (!showOverlay) {
-      const audio = new Audio('https://cdn.discordapp.com/attachments/1124879216316522600/1215982702117912717/HOW_U_FEEL.mp4?ex=6623a524&is=66113024&hm=a017ac2150fe82944ca44ca43deec228d2ca0b8cc859a3b070beee9cbe760296&');
-      audio.loop = true; // Loop the audio indefinitely
+      const audio = new Audio(
+        "https://cdn.discordapp.com/attachments/1314045777785655296/1321696331990827170/FIGHT_CLUB___INSOMNIA.mp4?ex=676e2d21&is=676cdba1&hm=ed1efcf4d9e3afe673e3927375ebbaa891d1af56702e47c06cfdf573a3214ee0&"
+      );
+      audio.loop = true;
       audio.play();
     }
   }, [showOverlay]);
 
-  const handleOverlayClick = () => {
-    setShowOverlay(false);
-  };
+  if (!hydrated) return null; // Skip rendering until client-side hydration
 
   return (
     <main>
-      <div className={`fixed inset-0 z-50 bg-black ${showOverlay ? '' : 'hidden'}`} onClick={handleOverlayClick}>
+      <div
+        className={`fixed inset-0 z-50 bg-black ${showOverlay ? "" : "hidden"}`}
+        onClick={() => setShowOverlay(false)}
+      >
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-white text-opacity-75 hover:text-opacity-100 duration-300 ease-in-out text-lg cursor-pointer">
-            <a id='overlay'>
-            {ipAddress ? ` ${ipAddress}` : 'Fetching ip...'}
+            <a id="overlay">
+              {ipAddress ? ` ${ipAddress}` : "Fetching IP..."}
             </a>
-            <br></br>
-            <span className='text-white text-opacity-70 justify-center items-center flex text-xs'> (click to enter)</span>
+            <br />
+            <span className="text-white text-opacity-70 justify-center items-center flex text-xs">
+              (click to enter)
+            </span>
           </div>
         </div>
       </div>
-      {/* Use video element for background */}
-      <video autoPlay loop muted className="fixed inset-0 object-cover z-0 w-full h-full">
-        <source src="https://cdn.discordapp.com/attachments/1124879216316522600/1215982702117912717/HOW_U_FEEL.mp4?ex=6623a524&is=66113024&hm=a017ac2150fe82944ca44ca43deec228d2ca0b8cc859a3b070beee9cbe760296&" />
+      <video
+        autoPlay
+        loop
+        muted
+        className="fixed inset-0 object-cover z-0 w-full h-full"
+      >
+        <source
+          src="https://cdn.discordapp.com/attachments/1314045777785655296/1321696331990827170/FIGHT_CLUB___INSOMNIA.mp4?ex=676e2d21&is=676cdba1&hm=ed1efcf4d9e3afe673e3927375ebbaa891d1af56702e47c06cfdf573a3214ee0&"
+        />
         Your browser does not support the video tag.
       </video>
       <ThreeDCardDemo />
     </main>
   );
-}
+};
 
 export default Framed;

@@ -2,9 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: #000;
   color: white;
+  overflow: -moz-scrollbars-none;  /* For Firefox */
+  scrollbar-width: none;           /* For Firefox */
+}
+
+body::-webkit-scrollbar {
+  display: none;  /* For Webkit-based browsers (Chrome, Safari) */
+}
+
+.inter-var {
+  /* Adjust the width and height if needed */
+  width: auto;
+  height: auto;
 }
 
 .avatar img {
