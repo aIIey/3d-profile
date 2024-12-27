@@ -61,6 +61,7 @@ const Framed = () => {
         autoPlay
         loop
         muted
+        playsInline
         className="fixed inset-0 object-cover z-0 w-full h-full"
       >
         <source
