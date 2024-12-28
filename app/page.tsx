@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ThreeDCardDemo from "./card2/page";
 
 const Framed = () => {
   const [showOverlay, setShowOverlay] = useState(true);
   const [ipAddress, setIpAddress] = useState(null);
   const [hydrated, setHydrated] = useState(false); // Prevent rendering until hydration
+  const videoRef = useRef(null);
 
   useEffect(() => {
     setHydrated(true); // Indicate hydration is complete
@@ -27,15 +28,15 @@ const Framed = () => {
     }
   }, [showOverlay]);
 
-  useEffect(() => {
-    if (!showOverlay) {
-      const audio = new Audio(
-        "/music.webm"
-      );
-      audio.loop = true;
-      audio.play();
+  const handleOverlayClick = () => {
+    setShowOverlay(false);
+    if (videoRef.current) {
+      videoRef.current.muted = false; // Unmute the video
+      videoRef.current.play().catch((err) => {
+        console.error("Error playing video:", err);
+      });
     }
-  }, [showOverlay]);
+  };
 
   if (!hydrated) return null; // Skip rendering until client-side hydration
 
@@ -43,7 +44,7 @@ const Framed = () => {
     <main>
       <div
         className={`fixed inset-0 z-50 bg-black ${showOverlay ? "" : "hidden"}`}
-        onClick={() => setShowOverlay(false)}
+        onClick={handleOverlayClick}
       >
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-white text-opacity-75 hover:text-opacity-100 duration-300 ease-in-out text-lg cursor-pointer">
@@ -58,15 +59,14 @@ const Framed = () => {
         </div>
       </div>
       <video
+        ref={videoRef}
         autoPlay
         loop
         muted
         playsInline
         className="fixed inset-0 object-cover z-0 w-full h-full"
       >
-        <source
-          src="/music.webm"
-        />
+        <source src="/music.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       <ThreeDCardDemo />
