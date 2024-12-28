@@ -5,9 +5,9 @@ import ThreeDCardDemo from "./card2/page";
 
 const Framed = () => {
   const [showOverlay, setShowOverlay] = useState(true);
-  const [ipAddress, setIpAddress] = useState(null);
+  const [ipAddress, setIpAddress] = useState<string | null>(null);
   const [hydrated, setHydrated] = useState(false); // Prevent rendering until hydration
-  const videoRef = useRef(null);
+  const videoRef = useRef<HTMLVideoElement>(null); // Properly typed ref
 
   useEffect(() => {
     setHydrated(true); // Indicate hydration is complete
@@ -32,9 +32,11 @@ const Framed = () => {
     setShowOverlay(false);
     if (videoRef.current) {
       videoRef.current.muted = false; // Unmute the video
-      videoRef.current.play().catch((err) => {
-        console.error("Error playing video:", err);
-      });
+      videoRef.current
+        .play()
+        .catch((err: unknown) => {
+          console.error("Error playing video:", err);
+        });
     }
   };
 
