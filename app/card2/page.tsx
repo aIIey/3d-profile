@@ -11,7 +11,7 @@ function FramedCard () {
         <CardItem translateZ="60" className="w-full rounded-md mt-4">
             <div className="banner">
                 <Image
-                src={'/banner.png'}
+                src={'/banner2.jpg'}
                 width={960}
                 height={240}
                 alt="Banner"
