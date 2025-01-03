@@ -1,4 +1,4 @@
-# Website Documentation
+# dec.al
 
 ## Overview
 This repository contains the source code for a personal website built using **React**, **Next.js**, and **Tailwind CSS**. The site showcases a user profile card with a dynamic 3D effect and includes sections for a banner, profile details, and an "About Me" section.
